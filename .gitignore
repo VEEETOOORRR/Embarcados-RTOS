@@ -1,0 +1,36 @@
+# ==========================================
+# STM32CubeIDE Build Outputs (Subpastas e Raiz)
+# ==========================================
+Debug/
+Release/
+[Dd]ebug*/
+[Rr]elease*/
+
+# Arquivos compilados e executáveis
+*.o
+*.su
+*.d
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+
+# ==========================================
+# Eclipse & CubeIDE Workspace Configurations
+# ==========================================
+.settings/
+.launch
+*.launch
+
+# Metadados globais do workspace Eclipse
+.metadata/
+
+# ==========================================
+# System & Editor Files
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
