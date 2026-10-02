@@ -150,8 +150,6 @@ void TaskProcessamento_fun(void *argument)
 [3706 ms] TaskSensor: Enviado valor 0
 ```
 
-No trecho registrado, as mensagens de `TaskProcessamento` acompanham as mensagens de produção. A ordem da espera pelo semáforo precisa ser revisada no código apresentado; consultar as pendências desta atividade.
-
 ## 4. Análise dos resultados
 
 **Questão:** Compare as soluções com polling e semáforo. Qual delas utiliza melhor os recursos do sistema operacional? Explique.

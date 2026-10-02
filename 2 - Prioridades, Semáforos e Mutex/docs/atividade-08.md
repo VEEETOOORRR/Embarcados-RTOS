@@ -321,7 +321,7 @@ for(;;)
 | Proteger contadores de estatística | Mutex | `mutexVariavelEstatisticas` evita leitura inconsistente de `pecasOK` e `pecasFalha` por `TaskLog` durante a atualização por `TaskSupervisao` |
 | Controlar acesso à UART | Mutex | `mutexUart` mantém a integridade das mensagens de `TaskSupervisao` e `TaskLog` |
 | Evitar deadlock | Ordem de aquisição | Aquisição sempre na ordem `mutexUart` → `mutexVariavelEstatisticas` nas duas tarefas |
-| Tarefas que podem ficar bloqueadas | Semáforo e `osDelay` | Todas as tarefas bloqueiam em semáforo ou `osDelay`, com a exceção da espera ativa em `TaskSensor` descrita nas observações |
+| Tarefas que podem ficar bloqueadas | Semáforo e `osDelay` | Todas as tarefas bloqueiam em semáforo ou `osDelay`, com a exceção da espera ativa em `TaskSensor` |
 | Informações pela UART | Mutex | Uma linha por peça processada ou erro e um sumário a cada 10 s |
 
 # Análise final
