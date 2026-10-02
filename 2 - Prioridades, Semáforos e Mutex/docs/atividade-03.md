@@ -4,7 +4,11 @@
 
 Comparar polling e sincronização por semáforo binário na produção e no processamento de dados.
 
-## 2. Implementação e experimentos
+## 2. Diagrama
+
+![alt text](diagrama_atv3.png)
+
+## 3. Implementação e experimentos
 
 `TaskSensor` lê o estado de do botão K1 embutido na placa STM32F407VET6, soldado ao pino PE3. Para transmitir o estado desse botão, foi utilizada uma fila de comprimento 1. `TaskSensor` deposita a leitura do botão, e `TaskProcessamento` recebe o valor, conforme os nomes empregados no código.
 
@@ -148,7 +152,7 @@ void TaskProcessamento_fun(void *argument)
 
 No trecho registrado, as mensagens de `TaskProcessamento` acompanham as mensagens de produção. A ordem da espera pelo semáforo precisa ser revisada no código apresentado; consultar as pendências desta atividade.
 
-## 3. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Compare as soluções com polling e semáforo. Qual delas utiliza melhor os recursos do sistema operacional? Explique.
 

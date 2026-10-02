@@ -4,7 +4,11 @@
 
 Comparar o compartilhamento da UART sem proteção e com proteção por mutex.
 
-## 2. Implementação e experimentos
+## 2. Diagrama
+
+![alt text](diagrama_atv5.png)
+
+## 3. Implementação e experimentos
 
 ### Sem uso de mutex
 
@@ -95,7 +99,7 @@ TASKSENSOR
 
 Fazendo uso do mutex, a cada task imprime sua mensagem via UART 50 vezes sem "atropelo".
 
-## 3. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Por que um mutex é conceitualmente mais adequado para proteger a UART do que um semáforo?
 

@@ -4,7 +4,11 @@
 
 Representar a disponibilidade de vagas de estacionamento com um semáforo contador.
 
-## 2. Implementação e experimentos
+## 2. Diagrama
+
+![alt text](diagrama_atv4.png)
+
+## 3. Implementação e experimentos
 
 ```c
 void Carro1_fun(void *argument)
@@ -140,7 +144,7 @@ Os 5 carros seguem o modelo acima.
 
 ```
 
-## 3. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Quando um semáforo contador possui apenas uma unidade disponível, qual é o comportamento observado? Ele se torna equivalente a um mutex? Discuta as diferenças conceituais.
 

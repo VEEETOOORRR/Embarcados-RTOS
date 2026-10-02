@@ -4,8 +4,11 @@
 
 Investigar a influência da prioridade de uma tarefa de emergência e da carga de CPU sobre seu atendimento.
 
-## 2. Implementação e experimentos
+## 2. Diagrama
 
+![alt text](diagrama_atv2.png)
+
+## 3. Implementação e experimentos
 
 Para simular uma task de uso intensivo de CPU, foi implementado um laço for de contagem até 50 milhões.
 
@@ -117,7 +120,7 @@ Nenhuma mensagem de `TaskEmergencia` aparece no trecho registrado para prioridad
 
 **Prioridade maior:** 2503ms entre execuções.
 
-## 3. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Uma tarefa possuir prioridade elevada é suficiente para garantir que ela sempre apresentará um pequeno tempo de resposta? Justifique.
 

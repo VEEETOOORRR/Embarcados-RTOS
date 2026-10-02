@@ -4,7 +4,11 @@
 
 Investigar o resultado de incrementos concorrentes em uma variável compartilhada e a proteção com mutex.
 
-## 4. Implementação e experimentos
+## 2. Diagrama
+
+![alt text](diagrama_atv6.png)
+
+## 3. Implementação e experimentos
 
 ### Sem usar mutex
 
@@ -105,9 +109,7 @@ void Task02_fun(void *argument)
 200000
 ```
 
-[Registro completo disponível no rascunho](logs/atividade-06-registro-02.txt).
-
-## 5. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Explique por que contadorGlobal++ não deve ser considerado necessariamente atômico. Utilize a sequência LER → MODIFICAR → ESCREVER.
 

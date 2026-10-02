@@ -4,16 +4,9 @@
 
 Investigar o efeito das prioridades e do bloqueio voluntário no escalonamento de três tarefas.
 
-## 2. Diagrama da aplicação
+## 2. Diagrama
 
-Diagrama conceitual elaborado a partir das tarefas e recursos descritos; não representa uma medição temporal.
-
-```mermaid
-flowchart TD
-  S[TaskSensor] --> U["UART compartilhada"]
-  D[TaskDisplay] --> U
-  G[TaskDiagnostico] --> U
-```
+![alt text](diagrama_atv1.png)
 
 ## 3. Implementação e experimentos
 

@@ -1,37 +1,50 @@
 # Atividade 7 — Se estiver ocupado, faça outra coisa
 
-[Voltar ao índice](../README.md)
-
-**Situação:** registros organizados; revisão e complementação pendentes.
-
 ## 1. Objetivo
 
 Comparar a espera indefinida, a tentativa imediata e a espera limitada para adquirir um recurso.
 
-## 2. Configuração
+## 2. Diagrama
 
-| Item | Configuração |
-|---|---|
-| Recurso | Recurso compartilhado; identificar no projeto |
-| Mutex | Nome e criação a incluir |
-| Cenários | osWaitForever e timeouts 0, 10, 7 e 3 |
-| Tarefas | Nomes, prioridades e tempos de retenção a incluir |
+![alt text](diagrama_atv7.png)
 
-Consultar também o [ambiente comum](ambiente.md). Projeto correspondente: `projetos/atividade-07/` (a adicionar).
+## 3. Implementação e experimentos
 
-## 3. Diagrama da aplicação
-
-Fluxo conceitual para tentativa imediata ou espera limitada. Os nomes das tarefas e o recurso ainda precisam ser associados ao projeto.
-
-```mermaid
-flowchart TD
-  T["Tarefa solicitante"] --> A{"Mutex adquirido?"}
-  A -->|Sim| R["Usar recurso"]
-  R --> L["Liberar mutex"]
-  A -->|Não após a tentativa| O["Executar outra atividade"]
+```c
+void Task01_fun(void *argument)
+{
+  /* USER CODE BEGIN 5 */
+  /* Infinite loop */
+  for(;;)
+  {
+    if(osMutexAcquire(recursoMutexHandle, osWaitForever) == osOK){
+    	printf("[%lu ms] Mutex adquirido. Fazendo uso do recurso compartilhado!\r\n", osKernelGetTickCount());
+	osMutexRelease(recursoMutexHandle);
+    }
+    else {
+    	printf("[%lu ms] Mutex ocupado. Fazendo outra coisa...\r\n", osKernelGetTickCount());
+    }
+    osDelay(200);
+  }
+  /* USER CODE END 5 */
+}
 ```
 
-## 4. Implementação e experimentos
+```c
+void Task02_fun(void *argument)
+{
+  /* USER CODE BEGIN Task02_fun */
+  /* Infinite loop */
+  for(;;)
+  {
+	osMutexAcquire(recursoMutexHandle, osWaitForever);
+	osDelay(30);
+	osMutexRelease(recursoMutexHandle);
+	osDelay(5);
+  }
+  /* USER CODE END Task02_fun */
+}
+```
 
 ### saída usando osWaitForever
 
@@ -48,9 +61,22 @@ flowchart TD
 [1920 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 [2130 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 [2340 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
-```
+[2550 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[2760 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[2970 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[3180 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[3390 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[3600 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[3810 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4020 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4230 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4440 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4650 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4860 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5070 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5280 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 
-Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-registro-01.txt).
+```
 
 ### saída usando timeout = 0
 
@@ -67,9 +93,25 @@ Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-re
 [1837 ms] Mutex ocupado. Fazendo outra coisa...
 [2041 ms] Mutex ocupado. Fazendo outra coisa...
 [2245 ms] Mutex ocupado. Fazendo outra coisa...
-```
+[2449 ms] Mutex ocupado. Fazendo outra coisa...
+[2653 ms] Mutex ocupado. Fazendo outra coisa...
+[2857 ms] Mutex ocupado. Fazendo outra coisa...
+[3061 ms] Mutex ocupado. Fazendo outra coisa...
+[3265 ms] Mutex ocupado. Fazendo outra coisa...
+[3469 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[3674 ms] Mutex ocupado. Fazendo outra coisa...
+[3878 ms] Mutex ocupado. Fazendo outra coisa...
+[4082 ms] Mutex ocupado. Fazendo outra coisa...
+[4286 ms] Mutex ocupado. Fazendo outra coisa...
+[4490 ms] Mutex ocupado. Fazendo outra coisa...
+[4694 ms] Mutex ocupado. Fazendo outra coisa...
+[4898 ms] Mutex ocupado. Fazendo outra coisa...
+[5102 ms] Mutex ocupado. Fazendo outra coisa...
+[5306 ms] Mutex ocupado. Fazendo outra coisa...
+[5510 ms] Mutex ocupado. Fazendo outra coisa...
+[5714 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 
-Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-registro-02.txt).
+```
 
 ### Utilizando timeout = 10
 
@@ -91,12 +133,9 @@ Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-re
 [2760 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 ```
 
-[Registro completo disponível no rascunho](logs/atividade-07-registro-03.txt).
-
 ### Utilizando timeout = 7
 
 ```text
-[10 ms] Mutex ocupado. Fazendo outra coisa...
 [7 ms] Mutex ocupado. Fazendo outra coisa...
 [218 ms] Mutex ocupado. Fazendo outra coisa...
 [429 ms] Mutex ocupado. Fazendo outra coisa...
@@ -108,9 +147,28 @@ Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-re
 [1695 ms] Mutex ocupado. Fazendo outra coisa...
 [1906 ms] Mutex ocupado. Fazendo outra coisa...
 [2117 ms] Mutex ocupado. Fazendo outra coisa...
-```
+[2328 ms] Mutex ocupado. Fazendo outra coisa...
+[2539 ms] Mutex ocupado. Fazendo outra coisa...
+[2750 ms] Mutex ocupado. Fazendo outra coisa...
+[2961 ms] Mutex ocupado. Fazendo outra coisa...
+[3172 ms] Mutex ocupado. Fazendo outra coisa...
+[3383 ms] Mutex ocupado. Fazendo outra coisa...
+[3594 ms] Mutex ocupado. Fazendo outra coisa...
+[3805 ms] Mutex ocupado. Fazendo outra coisa...
+[4016 ms] Mutex ocupado. Fazendo outra coisa...
+[4227 ms] Mutex ocupado. Fazendo outra coisa...
+[4438 ms] Mutex ocupado. Fazendo outra coisa...
+[4649 ms] Mutex ocupado. Fazendo outra coisa...
+[4860 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5070 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5280 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5490 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5700 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[5910 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[6120 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[6330 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
 
-Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-registro-04.txt).
+```
 
 ### Utilizando timeout = 3
 
@@ -127,24 +185,32 @@ Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-re
 [1864 ms] Mutex ocupado. Fazendo outra coisa...
 [2071 ms] Mutex ocupado. Fazendo outra coisa...
 [2275 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[2483 ms] Mutex ocupado. Fazendo outra coisa...
+[2690 ms] Mutex ocupado. Fazendo outra coisa...
+[2897 ms] Mutex ocupado. Fazendo outra coisa...
+[3104 ms] Mutex ocupado. Fazendo outra coisa...
+[3311 ms] Mutex ocupado. Fazendo outra coisa...
+[3518 ms] Mutex ocupado. Fazendo outra coisa...
+[3725 ms] Mutex ocupado. Fazendo outra coisa...
+[3932 ms] Mutex ocupado. Fazendo outra coisa...
+[4139 ms] Mutex ocupado. Fazendo outra coisa...
+[4343 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[4551 ms] Mutex ocupado. Fazendo outra coisa...
+[4758 ms] Mutex ocupado. Fazendo outra coisa...
+[4965 ms] Mutex ocupado. Fazendo outra coisa...
+[5172 ms] Mutex ocupado. Fazendo outra coisa...
+[5379 ms] Mutex ocupado. Fazendo outra coisa...
+[5586 ms] Mutex ocupado. Fazendo outra coisa...
+[5793 ms] Mutex ocupado. Fazendo outra coisa...
+[6000 ms] Mutex ocupado. Fazendo outra coisa...
+[6207 ms] Mutex ocupado. Fazendo outra coisa...
+[6411 ms] Mutex adquirido. Fazendo uso do recurso compartilhado!
+[6619 ms] Mutex ocupado. Fazendo outra coisa...
+[6826 ms] Mutex ocupado. Fazendo outra coisa...
 ```
 
-Trecho inicial. [Registro completo disponível no rascunho](logs/atividade-07-registro-05.txt).
-
-## 5. Análise dos resultados
+## 4. Análise dos resultados
 
 **Questão:** Em uma aplicação de controle em tempo real, por que pode ser inadequado bloquear uma tarefa indefinidamente esperando por um recurso que não é essencial para sua operação principal?
 
-**Pendente:** desenvolver a resposta relacionando os conceitos aos resultados registrados.
-
-## 6. Conclusão
-
-**Pendente:** consolidar a conclusão após resolver os itens de revisão abaixo.
-
-## 7. Pendências e verificações
-
-- [ ] Incluir o código dos cenários e explicar o instante em que o timestamp é obtido.
-- [ ] No cenário timeout 7, o registro começa com 10 ms seguido de 7 ms. A sequência foi preservada; verificar a origem dessa ordem antes de interpretar os tempos.
-- [ ] Preencher a comparação dos cenários e a resposta à questão de análise.
-- [ ] Adicionar capturas reais do terminal serial.
-- [ ] Vincular o projeto STM32CubeIDE e conferir a correspondência entre código, configuração e resultados.
+Porque pode ocorrer uma situação de starvation e o sistema como um todo ser paralizado devido ao fato de essa tarefa estar presa aguardando o recurso não-essencial.
