@@ -57,8 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define LED_PIN_Pin GPIO_PIN_2
-#define LED_PIN_GPIO_Port GPIOE
 #define BTN_K1_Pin GPIO_PIN_3
 #define BTN_K1_GPIO_Port GPIOE
 #define BTN_K0_Pin GPIO_PIN_4

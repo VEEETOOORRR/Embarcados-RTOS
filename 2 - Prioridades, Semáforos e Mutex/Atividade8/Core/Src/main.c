@@ -77,7 +77,7 @@ osThreadId_t TaskAlarmeHandle;
 const osThreadAttr_t TaskAlarme_attributes = {
   .name = "TaskAlarme",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for mutexUart */
 osMutexId_t mutexUartHandle;
@@ -350,17 +350,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_PIN_GPIO_Port, LED_PIN_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, BUZZER_PIN_Pin|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : LED_PIN_Pin */
-  GPIO_InitStruct.Pin = LED_PIN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_PIN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : BTN_K1_Pin BTN_K0_Pin */
   GPIO_InitStruct.Pin = BTN_K1_Pin|BTN_K0_Pin;
@@ -410,9 +400,10 @@ void TaskSensor_fun(void *argument)
   {
 	osSemaphoreAcquire(semaforoOperacaoHandle, osWaitForever); // Semáforo de permissão para operar
 
-	if(HAL_GPIO_ReadPin(IR_SENSOR_PIN_GPIO_Port, IR_SENSOR_PIN_Pin)){
+	if(HAL_GPIO_ReadPin(IR_SENSOR_PIN_GPIO_Port, IR_SENSOR_PIN_Pin) == GPIO_PIN_RESET){ // SENSOR ATIVO EM NÍVEL LÓGICO BAIXO
     	osSemaphoreRelease(semaforoSensorHandle);
-    	osDelay(200);
+    	osDelay(100);
+    	while(HAL_GPIO_ReadPin(IR_SENSOR_PIN_GPIO_Port, IR_SENSOR_PIN_Pin) == GPIO_PIN_RESET);
     }
 
 	osSemaphoreRelease(semaforoOperacaoHandle);
@@ -482,7 +473,7 @@ void TaskSupervisao_fun(void *argument)
 
 		  } else {
 			  pecasOK++;
-			  printf("[%lu ms] Peça processada no valor de %d", osKernelGetTickCount(), valorProcessadoLocal);
+			  printf("[%lu ms] Peça processada no valor de %d\r\n", osKernelGetTickCount(), valorProcessadoLocal);
 		  }
 
 		  osMutexRelease(mutexUartHandle);
@@ -534,7 +525,7 @@ void TaskAlarme_fun(void *argument)
 		  osSemaphoreAcquire(semaforoOperacaoHandle, osWaitForever);
 		  HAL_GPIO_WritePin(BUZZER_PIN_GPIO_Port, BUZZER_PIN_Pin, 1);
 
-		  while(HAL_GPIO_ReadPin(BTN_K1_GPIO_Port, BTN_K1_Pin) == 0){
+		  while(HAL_GPIO_ReadPin(BTN_K1_GPIO_Port, BTN_K1_Pin) == 1){
 			  osDelay(50);
 		  }
 
